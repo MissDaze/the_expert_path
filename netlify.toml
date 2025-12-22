@@ -1,0 +1,14 @@
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production.environment]
+  STRIPE_SECRET_KEY = ""
+  STRIPE_PUBLISHABLE_KEY = ""
+  VITE_APP_TITLE = "ExpertPath"
+  VITE_APP_LOGO = "/images/brand-logo.png"
