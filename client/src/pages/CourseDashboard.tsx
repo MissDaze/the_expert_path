@@ -161,7 +161,7 @@ export default function CourseDashboard() {
 
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Course Modules</h2>
             <div className="space-y-4">
-              {course.modules.map((module, index) => (
+              {course.modules.map((module) => (
                 <Link key={module.id} href={`/course/${course.id}/module/${module.id}`}>
                   <a className="block bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-300 transition">
                     <div className="flex items-start justify-between">
