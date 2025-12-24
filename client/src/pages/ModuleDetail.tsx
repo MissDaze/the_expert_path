@@ -1,9 +1,10 @@
 import { useRoute, Link } from 'wouter';
 import { getCourseById, getModuleById } from '@/lib/courseContent';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, BookOpen, Target, Award } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, Target, Award, Download } from 'lucide-react';
 import { usePayment } from '@/contexts/PaymentContext';
 import { Paywall } from '@/components/Paywall';
+import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 
 export default function ModuleDetail() {
   const { isPaid } = usePayment();
@@ -28,6 +29,60 @@ export default function ModuleDetail() {
   const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
   const previousModule = moduleIndex > 0 ? course.modules[moduleIndex - 1] : null;
   const nextModule = moduleIndex < course.modules.length - 1 ? course.modules[moduleIndex + 1] : null;
+
+  // Helper function to get the course folder name from course ID
+  const getCourseFolderName = (courseId: string): string => {
+    const folderMap: Record<string, string> = {
+      'git-expert': 'git',
+      'python-expert': 'python',
+      'english-expert': 'english',
+      'outlier-tips': 'outlier',
+      'one-day-course': 'one-day',
+    };
+    return folderMap[courseId] || courseId;
+  };
+
+  // Construct the path to the module markdown file
+  const courseFolder = getCourseFolderName(courseId);
+  
+  // Try multiple file paths - some modules have specific filenames
+  const getMarkdownFilePaths = (): string[] => {
+    const day = String(module.day).padStart(2, '0');
+    const paths = [
+      `/course-materials/${courseFolder}/modules/day-${day}-module.md`,
+    ];
+    
+    // For git course day 1, there's a special file
+    if (courseId === 'git-expert' && module.day === 1) {
+      paths.unshift(`/course-materials/${courseFolder}/modules/day-${day}-what-is-git.md`);
+    }
+    
+    return paths;
+  };
+  
+  const markdownFilePaths = getMarkdownFilePaths();
+
+  // Helper function to download files
+  const handleDownload = (type: 'exercises' | 'answers' | 'project') => {
+    const day = String(module.day).padStart(2, '0');
+    let filePath = '';
+    
+    if (type === 'exercises') {
+      filePath = `/course-materials/${courseFolder}/modules/day-${day}-module.md`;
+    } else if (type === 'answers') {
+      filePath = `/course-materials/${courseFolder}/answer-keys/day-${day}-answers.md`;
+    } else if (type === 'project') {
+      filePath = `/course-materials/${courseFolder}/projects/day-${day}-project.md`;
+    }
+
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.download = filePath.split('/').pop() || 'download.md';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -120,9 +175,10 @@ export default function ModuleDetail() {
                 <BookOpen className="w-6 h-6 text-orange-600" />
                 <h2 className="text-2xl font-bold text-gray-900">Course Content</h2>
               </div>
-              <div className="prose prose-lg max-w-none text-gray-700">
-                <p>{module.content}</p>
-              </div>
+              <MarkdownRenderer 
+                filePath={markdownFilePaths}
+                fallback={module.content}
+              />
             </div>
 
             {/* Topics */}
@@ -140,17 +196,39 @@ export default function ModuleDetail() {
 
             {/* Practice Exercises */}
             <div className="bg-blue-50 rounded-lg p-8 border border-blue-200 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Practice Exercises</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Practice Exercises & Materials</h2>
               <p className="text-gray-700 mb-4">This module includes:</p>
               <ul className="space-y-2 text-gray-700 mb-6">
-                <li>✓ 2 theory/written test exercises</li>
-                <li>✓ 2 practical projects</li>
+                <li>✓ Comprehensive module content</li>
+                <li>✓ Practical exercises and projects</li>
                 <li>✓ Complete answer key and solutions</li>
                 <li>✓ Step-by-step instructions</li>
               </ul>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                Download Exercises & Projects
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button 
+                  onClick={() => handleDownload('exercises')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Module
+                </Button>
+                <Button 
+                  onClick={() => handleDownload('project')}
+                  variant="outline"
+                  className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Project
+                </Button>
+                <Button 
+                  onClick={() => handleDownload('answers')}
+                  variant="outline"
+                  className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Answers
+                </Button>
+              </div>
             </div>
           </div>
 

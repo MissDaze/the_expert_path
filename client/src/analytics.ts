@@ -1,7 +1,7 @@
 // Analytics initialization
 export const initAnalytics = () => {
-  const analyticsEndpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT;
-  const websiteId = import.meta.env.VITE_ANALYTICS_WEBSITE_ID;
+  const analyticsEndpoint = (import.meta as any).env?.VITE_ANALYTICS_ENDPOINT;
+  const websiteId = (import.meta as any).env?.VITE_ANALYTICS_WEBSITE_ID;
 
   // Only load analytics if both environment variables are set
   if (analyticsEndpoint && websiteId) {
