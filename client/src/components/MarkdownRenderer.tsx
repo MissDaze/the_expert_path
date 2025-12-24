@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Streamdown } from 'streamdown';
 
 interface MarkdownRendererProps {
-  filePath: string;
+  filePath: string | string[];
   fallback?: string;
 }
 
@@ -17,14 +17,30 @@ export function MarkdownRenderer({ filePath, fallback }: MarkdownRendererProps) 
         setLoading(true);
         setError(null);
         
-        const response = await fetch(filePath);
+        const paths = Array.isArray(filePath) ? filePath : [filePath];
+        let loadedContent = '';
+        let lastError: Error | null = null;
         
-        if (!response.ok) {
-          throw new Error(`Failed to load content: ${response.statusText}`);
+        // Try each path in order until one succeeds
+        for (const path of paths) {
+          try {
+            const response = await fetch(path);
+            
+            if (response.ok) {
+              loadedContent = await response.text();
+              break;
+            }
+          } catch (err) {
+            lastError = err instanceof Error ? err : new Error('Failed to load');
+            continue;
+          }
         }
         
-        const text = await response.text();
-        setContent(text);
+        if (loadedContent) {
+          setContent(loadedContent);
+        } else {
+          throw lastError || new Error('Failed to load content from any path');
+        }
       } catch (err) {
         console.error('Error loading markdown:', err);
         setError(err instanceof Error ? err.message : 'Failed to load content');

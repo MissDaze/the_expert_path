@@ -44,7 +44,23 @@ export default function ModuleDetail() {
 
   // Construct the path to the module markdown file
   const courseFolder = getCourseFolderName(courseId);
-  const markdownFilePath = `/course-materials/${courseFolder}/modules/day-${String(module.day).padStart(2, '0')}-module.md`;
+  
+  // Try multiple file paths - some modules have specific filenames
+  const getMarkdownFilePaths = (): string[] => {
+    const day = String(module.day).padStart(2, '0');
+    const paths = [
+      `/course-materials/${courseFolder}/modules/day-${day}-module.md`,
+    ];
+    
+    // For git course day 1, there's a special file
+    if (courseId === 'git-expert' && module.day === 1) {
+      paths.unshift(`/course-materials/${courseFolder}/modules/day-${day}-what-is-git.md`);
+    }
+    
+    return paths;
+  };
+  
+  const markdownFilePaths = getMarkdownFilePaths();
 
   // Helper function to download files
   const handleDownload = (type: 'exercises' | 'answers' | 'project') => {
@@ -160,7 +176,7 @@ export default function ModuleDetail() {
                 <h2 className="text-2xl font-bold text-gray-900">Course Content</h2>
               </div>
               <MarkdownRenderer 
-                filePath={markdownFilePath}
+                filePath={markdownFilePaths}
                 fallback={module.content}
               />
             </div>
