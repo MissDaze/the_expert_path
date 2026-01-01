@@ -14,10 +14,14 @@ export const config = {
 };
 
 // Validate required environment variables
-const requiredEnvVars = ['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY'];
+const requiredEnvVars = ['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'STRIPE_WEBHOOK_SECRET'];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
-    console.warn(`Warning: ${envVar} is not set. Payment processing will not work.`);
+    if (envVar === 'STRIPE_WEBHOOK_SECRET') {
+      console.warn(`Warning: ${envVar} is not set. Webhook signature verification will not work.`);
+    } else {
+      console.warn(`Warning: ${envVar} is not set. Payment processing will not work.`);
+    }
   }
 }

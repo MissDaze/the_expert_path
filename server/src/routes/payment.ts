@@ -11,6 +11,16 @@ const stripe = new Stripe(config.stripe.secretKey, {
 // Rate limiting map (simple in-memory rate limiter)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
+// Cleanup old rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, limit] of rateLimitMap.entries()) {
+    if (now > limit.resetTime) {
+      rateLimitMap.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const limit = rateLimitMap.get(ip);
@@ -95,10 +105,19 @@ router.get('/checkout/:sessionId', async (req: Request, res: Response) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status === 'paid') {
+      // Parse courses safely
+      let courses: string[] = [];
+      try {
+        courses = session.metadata?.courses ? JSON.parse(session.metadata.courses) : [];
+      } catch (error) {
+        console.error('Error parsing courses metadata:', error);
+        courses = [];
+      }
+      
       res.json({
         status: 'paid',
         customerEmail: session.customer_details?.email,
-        courses: session.metadata?.courses ? JSON.parse(session.metadata.courses) : [],
+        courses,
       });
     } else {
       res.json({
