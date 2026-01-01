@@ -5,7 +5,7 @@ import { getPricingTier } from '../config/pricing.js';
 
 const router = express.Router();
 const stripe = new Stripe(config.stripe.secretKey, {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2023-10-16',
 });
 
 // Rate limiting map (simple in-memory rate limiter)
