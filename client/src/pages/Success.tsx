@@ -16,7 +16,7 @@ export default function Success() {
 
     if (sessionId) {
       // Verify payment with backend
-      fetch(`/api/checkout/${sessionId}`)
+      fetch(`http://localhost:3000/api/checkout/${sessionId}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 'paid') {

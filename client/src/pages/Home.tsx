@@ -7,9 +7,26 @@ export default function Home() {
 
   const closeModal = () => setActiveModal(null);
 
-  const proceedToCheckout = (stage: string) => {
-    // TODO: Integrate Stripe checkout
-    alert(`Stripe checkout for stage: ${stage}`);
+  const proceedToCheckout = async (stage: string) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/checkout/create-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: stage })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+      
+      const { url } = await response.json();
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to start checkout. Please try again.');
+    }
   };
 
   return (
