@@ -5,7 +5,7 @@ import path from 'path';
 const router = express.Router();
 
 // Get all courses
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
   // Return course metadata
   res.json({
     courses: [

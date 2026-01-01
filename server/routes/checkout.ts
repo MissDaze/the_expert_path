@@ -3,13 +3,14 @@ import Stripe from 'stripe';
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2023-10-16',
 });
 
 // Create checkout session
 router.post('/create-session', async (req, res) => {
   try {
-    const { priceId } = req.body;
+    // priceId is in request body for potential future use
+    const { priceId: _priceId } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

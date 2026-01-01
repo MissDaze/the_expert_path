@@ -20,7 +20,7 @@ app.use('/api/checkout', checkoutRoutes);
 app.use('/api/courses', coursesRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
