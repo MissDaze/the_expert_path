@@ -1,13 +1,19 @@
 import { useRoute, Link } from 'wouter';
+import { useState } from 'react';
 import { getCourseById, getModuleById } from '@/lib/courseContent';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, BookOpen, Target, Award } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, Target, Award, CheckCircle } from 'lucide-react';
 import { usePayment } from '@/contexts/PaymentContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { Paywall } from '@/components/Paywall';
+import { Quiz } from '@/components/Quiz';
+import { quizData } from '@/lib/quizData';
 
 export default function ModuleDetail() {
   const { isPaid } = usePayment();
+  const { markModuleComplete, isModuleComplete } = useProgress();
   const [match, params] = useRoute('/course/:courseId/module/:moduleId');
+  const [showQuiz, setShowQuiz] = useState(false);
 
   if (!match || !params) {
     return <div className="min-h-screen flex items-center justify-center">Module not found</div>;
@@ -28,6 +34,45 @@ export default function ModuleDetail() {
   const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
   const previousModule = moduleIndex > 0 ? course.modules[moduleIndex - 1] : null;
   const nextModule = moduleIndex < course.modules.length - 1 ? course.modules[moduleIndex + 1] : null;
+  
+  const moduleComplete = isModuleComplete(courseId, moduleId);
+  const quizQuestions = quizData[moduleId] || [];
+  
+  const handleQuizComplete = (score: number) => {
+    markModuleComplete(courseId, moduleId, score);
+    setShowQuiz(false);
+  };
+  
+  if (showQuiz && quizQuestions.length > 0) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+          <div className="container py-4 flex justify-between items-center">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowQuiz(false)}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              Back to Module
+            </Button>
+            <div className="text-sm text-gray-600">
+              {course.title} • Quiz
+            </div>
+          </div>
+        </header>
+
+        <div className="container py-12 max-w-4xl">
+          <Quiz 
+            questions={quizQuestions}
+            onComplete={handleQuizComplete}
+            moduleTitle={module.title}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -50,6 +95,12 @@ export default function ModuleDetail() {
         {/* Module Header */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">
+            {moduleComplete && (
+              <div className="inline-flex items-center bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold gap-2">
+                <CheckCircle className="w-5 h-5" />
+                Completed
+              </div>
+            )}
             <span className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-semibold">
               Day {module.day}
             </span>
@@ -152,6 +203,43 @@ export default function ModuleDetail() {
                 Download Exercises & Projects
               </Button>
             </div>
+
+            {/* Quiz Section */}
+            {quizQuestions.length > 0 && (
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-8 border border-purple-200 mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Test Your Knowledge</h2>
+                <p className="text-gray-700 mb-4">
+                  Take the quiz to test your understanding of this module. You need 70% or higher to pass.
+                </p>
+                <ul className="space-y-2 text-gray-700 mb-6">
+                  <li>✓ {quizQuestions.length} questions</li>
+                  <li>✓ Instant feedback with explanations</li>
+                  <li>✓ Track your progress</li>
+                  <li>✓ Earn certificates upon completion</li>
+                </ul>
+                {moduleComplete ? (
+                  <div className="flex items-center gap-4">
+                    <Button 
+                      onClick={() => setShowQuiz(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      Retake Quiz
+                    </Button>
+                    <div className="flex items-center gap-2 text-green-600">
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="font-semibold">Quiz Completed</span>
+                    </div>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={() => setShowQuiz(true)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    Take Quiz
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Column - Sidebar */}
