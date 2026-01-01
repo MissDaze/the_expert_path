@@ -16,7 +16,8 @@ export default function Success() {
 
     if (sessionId) {
       // Verify payment with backend
-      fetch(`/api/checkout/${sessionId}`)
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      fetch(`${apiUrl}/api/checkout/${sessionId}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 'paid') {
