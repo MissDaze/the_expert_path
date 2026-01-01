@@ -9,8 +9,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // Create checkout session
 router.post('/create-session', async (req, res) => {
   try {
-    // priceId is in request body for potential future use
-    const { priceId: _priceId } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

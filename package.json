@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
-    "dev:server": "tsx watch server/index.ts",
+    "dev:server": "npx tsx watch server/index.ts",
     "build": "vite build && tsc -p server/tsconfig.json",
     "start": "node dist/server/index.js",
     "preview": "vite preview --host",

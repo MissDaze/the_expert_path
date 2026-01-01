@@ -52,10 +52,14 @@ cp .env.example .env
 
 4. Add your environment variables:
 ```
+# Backend
 STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 DATABASE_URL=your_database_url (optional)
 JWT_SECRET=your_jwt_secret
+
+# Frontend (VITE_ prefix required for Vite)
+VITE_API_URL=http://localhost:3000
 ```
 
 5. Run development server:
