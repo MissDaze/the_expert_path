@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 // Create checkout session
-router.post('/create-session', async (req, res) => {
+router.post('/create-session', async (_req, res) => {
   try {
 
     const session = await stripe.checkout.sessions.create({
