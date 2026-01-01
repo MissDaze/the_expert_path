@@ -9,7 +9,10 @@
     "start": "vite preview --host",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:server": "cd server && pnpm install && pnpm dev",
+    "build:server": "cd server && pnpm install && pnpm build",
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm dev:server\" --names \"client,server\" --prefix-colors \"blue,green\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -77,6 +80,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "add": "^2.0.6",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.25.0",
     "pnpm": "^10.15.1",
     "postcss": "^8.4.47",

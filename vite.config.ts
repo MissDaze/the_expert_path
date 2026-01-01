@@ -16,5 +16,11 @@ export default defineConfig({
   },
   server: {
     middlewareMode: false,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
 })
