@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { allCourses } from '@/lib/courseContent';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, BookOpen, Clock, Zap } from 'lucide-react';
+import { ChevronRight, BookOpen, Clock, Zap, CheckCircle } from 'lucide-react';
 import { usePayment } from '@/contexts/PaymentContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { Paywall } from '@/components/Paywall';
+import { ProgressDashboard } from '@/components/ProgressDashboard';
 
 export default function CourseDashboard() {
   const { isPaid } = usePayment();
+  const { isModuleComplete } = useProgress();
   
   if (!isPaid) {
     return <Paywall title="Access Your Courses" description="Purchase the complete bundle to unlock all courses" />;
@@ -39,6 +42,9 @@ export default function CourseDashboard() {
           <>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Learning Path</h1>
             <p className="text-xl text-gray-600 mb-12">Start with free courses, then unlock the complete bundle</p>
+
+            {/* Progress Dashboard */}
+            <ProgressDashboard />
 
             {/* Free Courses Section */}
             <div className="mb-16">
@@ -161,39 +167,45 @@ export default function CourseDashboard() {
 
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Course Modules</h2>
             <div className="space-y-4">
-              {course.modules.map((module, index) => (
-                <Link key={module.id} href={`/course/${course.id}/module/${module.id}`}>
-                  <a className="block bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-300 transition">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-                            Day {module.day}
-                          </span>
-                          <span className="text-gray-500 text-sm">{module.duration}</span>
-                          <span className="text-gray-500 text-sm">•</span>
-                          <span className="text-gray-500 text-sm">{module.difficulty}</span>
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{module.title}</h3>
-                        <p className="text-gray-600 mb-3">{module.description}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {module.topics.slice(0, 3).map((topic, i) => (
-                            <span key={i} className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                              {topic}
+              {course.modules.map((module) => {
+                const isComplete = isModuleComplete(course.id, module.id);
+                return (
+                  <Link key={module.id} href={`/course/${course.id}/module/${module.id}`}>
+                    <a className="block bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-300 transition">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            {isComplete && (
+                              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                            )}
+                            <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                              Day {module.day}
                             </span>
-                          ))}
-                          {module.topics.length > 3 && (
-                            <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                              +{module.topics.length - 3} more
-                            </span>
-                          )}
+                            <span className="text-gray-500 text-sm">{module.duration}</span>
+                            <span className="text-gray-500 text-sm">•</span>
+                            <span className="text-gray-500 text-sm">{module.difficulty}</span>
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">{module.title}</h3>
+                          <p className="text-gray-600 mb-3">{module.description}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {module.topics.slice(0, 3).map((topic, i) => (
+                              <span key={i} className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                                {topic}
+                              </span>
+                            ))}
+                            {module.topics.length > 3 && (
+                              <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                                +{module.topics.length - 3} more
+                              </span>
+                            )}
+                          </div>
                         </div>
+                        <ChevronRight className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" />
                       </div>
-                      <ChevronRight className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" />
-                    </div>
-                  </a>
-                </Link>
-              ))}
+                    </a>
+                  </Link>
+                );
+              })}
             </div>
           </>
         ) : null}
