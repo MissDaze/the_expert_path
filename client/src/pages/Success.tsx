@@ -20,8 +20,9 @@ export default function Success() {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 'paid') {
-            // Mark user as paid
-            setPaid(true, ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert']);
+            // Mark user as paid with courses from response
+            const courses = data.courses || ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert'];
+            setPaid(true, courses);
             setIsLoading(false);
           } else {
             // Payment not completed
@@ -30,14 +31,12 @@ export default function Success() {
         })
         .catch((error) => {
           console.error('Error verifying payment:', error);
-          // Still mark as paid for now (in production, verify with backend)
-          setPaid(true, ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert']);
-          setIsLoading(false);
+          // On error, redirect to home
+          navigate('/');
         });
     } else {
-      // No session ID, assume payment successful
-      setPaid(true, ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert']);
-      setIsLoading(false);
+      // No session ID, redirect to home
+      navigate('/');
     }
   }, [setPaid, navigate]);
 
