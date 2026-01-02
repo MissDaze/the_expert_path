@@ -18,7 +18,7 @@ export default function Privacy() {
 
         <div className="space-y-12">
           <div className="animate-fade-in-up" style={{animationDelay: '0.1s', opacity: 0, animationFillMode: 'forwards'}}>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-gradient-to-r from-primary-500 to-accent-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-primary-500">
               1. Introduction
             </h2>
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
@@ -29,7 +29,7 @@ export default function Privacy() {
           </div>
 
           <div className="animate-fade-in-up" style={{animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards'}}>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-gradient-to-r from-primary-500 to-accent-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-primary-500">
               2. Information We Collect
             </h2>
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
@@ -40,7 +40,7 @@ export default function Privacy() {
           </div>
 
           <div className="animate-fade-in-up" style={{animationDelay: '0.3s', opacity: 0, animationFillMode: 'forwards'}}>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-gradient-to-r from-primary-500 to-accent-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-primary-500">
               3. How We Use Your Information
             </h2>
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
@@ -51,7 +51,7 @@ export default function Privacy() {
           </div>
 
           <div className="animate-fade-in-up" style={{animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards'}}>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-gradient-to-r from-primary-500 to-accent-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-primary-500">
               4. Data Security
             </h2>
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
@@ -62,7 +62,7 @@ export default function Privacy() {
           </div>
 
           <div className="animate-fade-in-up" style={{animationDelay: '0.5s', opacity: 0, animationFillMode: 'forwards'}}>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-gradient-to-r from-primary-500 to-accent-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 pb-3 border-b-4 border-primary-500">
               5. Your Rights
             </h2>
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
