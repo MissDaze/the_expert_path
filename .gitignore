@@ -3,5 +3,3 @@ node_modules/
 dist/
 .vite/
 .env
-server/dist/
-server/node_modules/
