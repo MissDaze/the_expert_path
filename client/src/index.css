@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
   html {
     scroll-behavior: smooth;
   }
@@ -17,7 +13,6 @@
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply bg-background text-foreground;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -27,11 +22,13 @@
   
   /* Custom selection styling */
   ::selection {
-    @apply bg-primary-200 text-primary-900;
+    background-color: #bfdbfe;
+    color: #1e3a8a;
   }
   
   ::-moz-selection {
-    @apply bg-primary-200 text-primary-900;
+    background-color: #bfdbfe;
+    color: #1e3a8a;
   }
 }
 
@@ -75,21 +72,8 @@
   
   /* Focus styles for accessibility */
   *:focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
-  }
-  
-  /* Card styles */
-  .card {
-    @apply bg-white rounded-xl shadow-md border border-border transition-shadow duration-300;
-  }
-  
-  .card-hover {
-    @apply hover:shadow-xl hover:-translate-y-1 transition-all duration-300;
-  }
-  
-  /* Gradient text */
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-600;
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px white;
   }
 }
 
@@ -177,23 +161,6 @@
     }
   }
   
-  /* Gradient backgrounds */
-  .bg-gradient-primary {
-    @apply bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800;
-  }
-  
-  .bg-gradient-secondary {
-    @apply bg-gradient-to-br from-secondary-500 via-secondary-600 to-secondary-700;
-  }
-  
-  .bg-gradient-accent {
-    @apply bg-gradient-to-br from-accent-500 via-accent-600 to-accent-700;
-  }
-  
-  .bg-gradient-rainbow {
-    @apply bg-gradient-to-r from-primary-500 via-accent-500 to-secondary-500;
-  }
-  
   /* Pattern backgrounds */
   .bg-dots-pattern {
     background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
@@ -204,11 +171,6 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
     background-size: 20px 20px;
-  }
-  
-  /* Smooth transitions */
-  .transition-smooth {
-    @apply transition-all duration-300 ease-in-out;
   }
   
   /* Text shadow utilities */
