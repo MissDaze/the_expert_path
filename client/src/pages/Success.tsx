@@ -42,73 +42,77 @@ export default function Success() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="inline-block animate-spin">
-            <Zap className="w-12 h-12 text-green-600" />
+          <div className="inline-block animate-spin mb-4">
+            <Zap className="w-16 h-16 text-green-600" />
           </div>
-          <p className="mt-4 text-gray-600">Verifying your payment...</p>
+          <p className="text-xl font-semibold text-gray-700">Verifying your payment...</p>
+          <p className="text-gray-500 mt-2">Please wait a moment</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-lg shadow-xl p-8 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-            <CheckCircle className="w-12 h-12 text-green-600" />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
+      <div className="max-w-lg w-full animate-scale-in">
+        <div className="bg-white rounded-3xl shadow-2xl p-10 text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-green-100 to-emerald-200 rounded-full mb-8 animate-bounce-slow">
+            <CheckCircle className="w-14 h-14 text-green-600" />
           </div>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3 font-display">Payment Successful!</h1>
+          <p className="text-gray-600 text-lg mb-10 leading-relaxed">
             Welcome to ExpertPath! Your payment has been processed and you now have lifetime access to all courses.
           </p>
 
-          <div className="bg-green-50 rounded-lg p-6 mb-8 text-left">
-            <h3 className="font-bold text-gray-900 mb-4">You now have access to:</h3>
-            <ul className="space-y-3 text-sm text-gray-700">
-              <li className="flex items-center gap-2">
-                <span className="text-green-600 font-bold">✓</span>
-                <span>Outlier Assessment Playbook</span>
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 mb-8 text-left border-2 border-green-200">
+            <h3 className="font-bold text-gray-900 mb-6 text-xl">You now have access to:</h3>
+            <ul className="space-y-4 text-sm text-gray-700">
+              <li className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                <span className="font-medium">Outlier Assessment Playbook</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-600 font-bold">✓</span>
-                <span>2-Day Outlier Crash Course</span>
+              <li className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                <span className="font-medium">2-Day Outlier Crash Course</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-600 font-bold">✓</span>
-                <span>Git Expert Mastery (15 days)</span>
+              <li className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                <span className="font-medium">Git Expert Mastery (15 days)</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-600 font-bold">✓</span>
-                <span>Python Expert Mastery (15 days)</span>
+              <li className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                <span className="font-medium">Python Expert Mastery (15 days)</span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-600 font-bold">✓</span>
-                <span>English Expert Mastery (15 days)</span>
+              <li className="flex items-start gap-3">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-600 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                <span className="font-medium">English Expert Mastery (15 days)</span>
               </li>
             </ul>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <Button
               onClick={() => navigate('/dashboard')}
-              className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-6"
+              variant="success"
+              size="xl"
+              className="w-full"
             >
               Go to Dashboard
             </Button>
             <Button
               onClick={() => navigate('/')}
               variant="outline"
-              className="w-full text-gray-700 border-gray-300"
+              size="lg"
+              className="w-full"
             >
               Back to Home
             </Button>
           </div>
 
-          <p className="text-xs text-gray-500 mt-6">
+          <p className="text-xs text-gray-500 mt-8 leading-relaxed">
             A confirmation email has been sent to your email address. You can access your courses anytime from your dashboard.
           </p>
         </div>
