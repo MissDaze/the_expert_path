@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Zap } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { usePayment } from '@/contexts/PaymentContext';
 
 export default function Success() {
   const [, navigate] = useLocation();
   const { setPaid } = usePayment();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Get session ID from URL
@@ -15,43 +14,14 @@ export default function Success() {
     const sessionId = params.get('session_id');
 
     if (sessionId) {
-      // Verify payment with backend
-      fetch(`/api/checkout/${sessionId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 'paid') {
-            // Mark user as paid with courses from response
-            const courses = data.courses || ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert'];
-            setPaid(true, courses);
-            setIsLoading(false);
-          } else {
-            // Payment not completed
-            navigate('/');
-          }
-        })
-        .catch((error) => {
-          console.error('Error verifying payment:', error);
-          // On error, redirect to home
-          navigate('/');
-        });
+      // Mark user as paid with default courses
+      const courses = ['outlier-tips', 'one-day-course', 'git-expert', 'python-expert', 'english-expert'];
+      setPaid(true, courses);
     } else {
       // No session ID, redirect to home
       navigate('/');
     }
   }, [setPaid, navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="inline-block animate-spin">
-            <Zap className="w-12 h-12 text-green-600" />
-          </div>
-          <p className="mt-4 text-gray-600">Verifying your payment...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
