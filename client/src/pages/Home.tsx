@@ -7,22 +7,31 @@ export default function Home() {
 
   const closeModal = () => setActiveModal(null);
 
-  const proceedToCheckout = async (stage: string) => {
+  const proceedToCheckout = async (stage: string, isRetry = false): Promise<void> => {
     try {
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Demo-Code': localStorage.getItem('demo_code') || '',
         },
         body: JSON.stringify({ stage }),
       });
 
       if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401 && data.gated && !isRetry) {
+          const entered = window.prompt('Enter the demo access code to continue:');
+          if (entered) {
+            localStorage.setItem('demo_code', entered.trim());
+            return proceedToCheckout(stage, true);
+          }
+        }
         throw new Error('Failed to create checkout session');
       }
 
       const { url } = await response.json();
-      
+
       // Redirect to Stripe checkout
       window.location.href = url;
     } catch (error) {

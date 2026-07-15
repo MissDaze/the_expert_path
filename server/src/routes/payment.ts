@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { config } from '../config/environment.js';
 import { getPricingTier } from '../config/pricing.js';
+import { demoGate } from '../middleware/demoGate.js';
 
 const router = express.Router();
 const stripe = new Stripe(config.stripe.secretKey, {
@@ -39,7 +40,7 @@ function checkRateLimit(ip: string): boolean {
 }
 
 // POST /api/create-checkout-session
-router.post('/create-checkout-session', async (req: Request, res: Response) => {
+router.post('/create-checkout-session', demoGate, async (req: Request, res: Response) => {
   try {
     const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
 
